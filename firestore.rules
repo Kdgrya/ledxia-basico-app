@@ -1,0 +1,49 @@
+rules_version = '2';
+
+// Multi-tenant rules. Every clinic's data lives under /tenants/{tid}. A user
+// can only touch data for the tenant in their custom claims. Sensitive
+// collections (users, fiscal, e-CF, bridges) are written only by Cloud
+// Functions via the Admin SDK, which bypasses these rules.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+    function sameTenant(tid) {
+      return signedIn() && request.auth.token.tenantId == tid;
+    }
+    function isAdmin(tid) {
+      return sameTenant(tid) && request.auth.token.role == 'admin';
+    }
+
+    match /tenants/{tid} {
+      allow read: if sameTenant(tid);
+      allow write: if false; // tenant docs provisioned by Cloud Functions
+
+      // Operational data: any member of the tenant can read/write.
+      match /patients/{doc}     { allow read, write: if sameTenant(tid); }
+      match /companies/{doc}     { allow read, write: if sameTenant(tid); }
+      match /services/{doc}      { allow read, write: if sameTenant(tid); }
+      match /invoices/{doc}      { allow read, write: if sameTenant(tid); }
+      match /payments/{doc}      { allow read, write: if sameTenant(tid); }
+      match /cashSessions/{doc}  { allow read, write: if sameTenant(tid); }
+      match /cashMovements/{doc} { allow read, write: if sameTenant(tid); }
+      // Printing: printers writable by any tenant member; printJobs only created
+      // by the client — updates (status/processedAt) are done by the agent via Admin SDK.
+      match /printers/{doc}  { allow read: if sameTenant(tid); allow write: if sameTenant(tid); }
+      match /printJobs/{doc} { allow read: if sameTenant(tid); allow create: if sameTenant(tid); allow update: if false; }
+
+      // Clinic settings/branding: read by members, write by admins.
+      match /settings/{doc}      { allow read: if sameTenant(tid); allow write: if isAdmin(tid); }
+      match /roles/{doc}         { allow read: if sameTenant(tid); allow write: if isAdmin(tid); }
+
+      // Privileged: readable by the tenant, written only via Admin SDK.
+      match /users/{doc}           { allow read: if sameTenant(tid); allow write: if false; }
+      match /bridges/{doc}         { allow read: if sameTenant(tid); allow write: if false; }
+      match /ecfConfig/{doc}       { allow read: if isAdmin(tid);    allow write: if false; }
+      match /fiscalSequences/{doc} { allow read: if sameTenant(tid); allow write: if false; }
+      match /ecfSubmissions/{doc}  { allow read: if sameTenant(tid); allow write: if false; }
+    }
+  }
+}
