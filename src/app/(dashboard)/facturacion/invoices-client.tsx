@@ -42,14 +42,6 @@ export function InvoicesClient() {
           <h2 className="text-2xl font-bold tracking-tight">Facturación</h2>
           <p className="text-sm text-muted-foreground">Historial de facturas y cargos.</p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" render={<Link href="/facturacion" />}>
-            <Wallet className="mr-2 h-4 w-4" /> Caja
-          </Button>
-          <Button render={<Link href="/recepcion" />}>
-            <Plus className="mr-2 h-4 w-4" /> Nueva factura
-          </Button>
-        </div>
       </div>
 
       <div className="rounded-lg border bg-background">

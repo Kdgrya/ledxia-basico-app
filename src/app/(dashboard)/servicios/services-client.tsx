@@ -32,12 +32,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-
-const TAX_OPTIONS = [
-  { value: 0, label: "Exento (0%)" },
-  { value: 18, label: "ITBIS 18%" },
-  { value: 16, label: "ITBIS 16%" },
-];
+import { ServicesReader } from "@/components/servicios/Import";
 
 export function ServicesClient() {
   const { tenantId } = useAuth();
@@ -87,16 +82,21 @@ export function ServicesClient() {
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Catálogo de servicios</h2>
           <p className="text-sm text-muted-foreground">Lista de precios de la clínica.</p>
-        </div>
+        </div>        
+      </div>
+      
         <Button
           onClick={() => {
             setEditing(null);
             setDialogOpen(true);
           }}
         >
-          <Plus className="mr-2 h-4 w-4" /> Nuevo servicio
+          <Plus className="mr-2 h-4 w-4 space-x-4" /> Nuevo Servicio
         </Button>
-      </div>
+
+      <ServicesReader/>
+
+        
 
       <div className="relative max-w-sm">
         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -115,7 +115,6 @@ export function ServicesClient() {
               <TableHead>Nombre</TableHead>
               <TableHead>Código</TableHead>
               <TableHead>Precio</TableHead>
-              <TableHead>ITBIS</TableHead>
               <TableHead>Estado</TableHead>
               <TableHead className="text-right">Acciones</TableHead>
             </TableRow>
@@ -269,21 +268,6 @@ function ServiceDialog({
                 value={form.price}
                 onChange={(e) => set("price", parseFloat(e.target.value) || 0)}
               />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="svc-tax">ITBIS</Label>
-              <select
-                id="svc-tax"
-                value={form.taxRate}
-                onChange={(e) => set("taxRate", parseInt(e.target.value, 10))}
-                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
-              >
-                {TAX_OPTIONS.map((o) => (
-                  <option key={o.value} value={o.value}>
-                    {o.label}
-                  </option>
-                ))}
-              </select>
             </div>
           </div>
           <DialogFooter>

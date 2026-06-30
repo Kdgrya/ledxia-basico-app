@@ -13,9 +13,9 @@ import { cn } from "@/lib/utils";
 
 const SUB_ITEMS: Partial<Record<ModuleKey, { label: string; path: string; icon: React.ComponentType<{ className?: string }> }[]>> = {
   reception: [
-    { label: "Catálogo de servicios", path: "/servicios", icon: BookOpen },
   ],
   settings: [
+    { label: "Catálogo de servicios", path: "/servicios", icon: BookOpen },
     { label: "Perfil de la clínica", path: "/configuracion/perfil", icon: Building2 },
     { label: "Sistema", path: "/configuracion/sistema", icon: SlidersHorizontal },
     { label: "Plantillas de impresión", path: "/configuracion/plantillas", icon: FileText },

@@ -26,6 +26,12 @@ import { cn } from "@/lib/utils";
 
 const DAY_MS = 86_400_000;
 
+const formm = [
+  { id: 1, name: "RADIOGRAFIA"},
+  { id: 2, name: "BIOPSIA"},
+  { id: 3, name: "SONOGRAFIA"}
+];
+
 function startOfToday() {
   const d = new Date();
   d.setHours(0, 0, 0, 0);
@@ -69,7 +75,7 @@ export function ReceptionClient() {
     return () => clearInterval(id);
   }, []);
 
-  // F1 abre el sheet de orden, F5 refresca.
+
   useEffect(() => {
     function handler(e: KeyboardEvent) {
       const target = e.target as HTMLElement;
@@ -162,14 +168,16 @@ export function ReceptionClient() {
                 </Button>
               </Link>
             </div>
-
+            
             <div className="flex flex-wrap items-center gap-1.5 border-b bg-slate-50/40 px-3 py-2 dark:bg-slate-950/10">
-              <KindChip active label="Todas" count={recentOrders.length} />
-              <KindChip
-                label="Servicios"
-                icon={ClipboardList}
-                count={recentOrders.length}
-              />
+              {formm.map((item, index) => (
+                <KindChip 
+                  key={index} // Always provide a unique key when rendering lists in React
+                  active 
+                  label={item.name} // Assuming 'item' is the individual string/value from 'formm'
+                  count={recentOrders.length} 
+                />
+              ))}
             </div>
 
             <div className="max-h-[520px] divide-y overflow-y-auto">
@@ -333,9 +341,6 @@ function POSButton({
           : { background: "linear-gradient(135deg, var(--brand-primary, #00A99D) 0%, #1B3050 100%)" }
       }
     >
-      <div className="absolute right-2 top-1.5 rounded bg-white/15 px-1.5 py-0.5 font-mono text-[10px] font-semibold">
-        {hotkey}
-      </div>
       <div className="flex h-full flex-col items-center justify-center gap-1.5">
         <Icon className="h-6 w-6" />
         <span className="text-sm font-semibold tracking-wide">{label}</span>

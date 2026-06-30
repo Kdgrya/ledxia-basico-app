@@ -262,20 +262,6 @@ function UserDialog({
               ))}
             </select>
           </div>
-          <div className="space-y-2">
-            <Label>Módulos permitidos</Label>
-            <div className="grid grid-cols-2 gap-2 rounded-md border p-3">
-              {ALL_MODULES.map((m) => (
-                <label key={m.key} className="flex items-center gap-2 text-sm">
-                  <Checkbox
-                    checked={perms.includes(m.key)}
-                    onCheckedChange={(c) => toggle(m.key, c === true)}
-                  />
-                  {m.label}
-                </label>
-              ))}
-            </div>
-          </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancelar

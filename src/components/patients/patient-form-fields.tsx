@@ -55,7 +55,7 @@ export function PatientFormFields({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-9">
       <section className="space-y-3">
         <SectionTitle icon={CheckCircle2}>Documento de identidad</SectionTitle>
         <div className="flex flex-wrap items-end gap-3">

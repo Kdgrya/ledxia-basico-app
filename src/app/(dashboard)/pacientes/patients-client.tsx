@@ -60,16 +60,8 @@ export function PatientsClient() {
           <h2 className="text-2xl font-bold tracking-tight">Pacientes</h2>
           <p className="text-sm text-muted-foreground">Registro de pacientes de la clínica.</p>
         </div>
-        <Button
-          onClick={() => {
-            setEditing(null);
-            setDialogOpen(true);
-          }}
-        >
-          <Plus className="mr-2 h-4 w-4" /> Nuevo paciente
-        </Button>
       </div>
-
+      
       <div className="relative max-w-sm">
         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input
